@@ -1,0 +1,140 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import Stats from "three/examples/jsm/libs/stats.module";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const ballGeometry = new THREE.SphereGeometry(0.25, 32, 16);
+      const ballMaterial = new THREE.MeshPhongMaterial({
+        color: "lightblue",
+        // wireframe: true,
+      });
+      const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+      ball.position.set(0, 3, 0);
+      ball.castShadow = true; //default is false
+      ball.receiveShadow = false; //default
+      scene.add(ball);
+
+      const flatGeometry = new THREE.PlaneGeometry(5, 5);
+      const flatMaterial = new THREE.MeshStandardMaterial({
+        color: "blue",
+        side: THREE.DoubleSide,
+      });
+      const flat = new THREE.Mesh(flatGeometry, flatMaterial);
+      flat.position.set(0, 0, 0);
+      flat.rotation.x = Math.PI / 2;
+      flat.receiveShadow = true;
+      scene.add(flat);
+
+      camera.position.set(3, 3, 3);
+      // camera.lookAt(cubeBox);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const light = new THREE.DirectionalLight(0xffffff, 0.5);
+      light.position.set(5, 5, 0);
+      light.castShadow = true;
+      scene.add(light);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+
+      const stats = Stats();
+      document.body.appendChild(stats.dom);
+
+      const tl = gsap.timeline();
+      tl.to(ball.position, {
+        duration: 1,
+        ease: "power1.in",
+        y: 0.25,
+      })
+        .to(ball.position, {
+          duration: 1.25,
+          ease: "power1.out",
+          y: 3,
+          z: 2,
+        })
+        .to(ball.position, {
+          duration: 1,
+          ease: "power1.in",
+          y: 0.25,
+          z: 2,
+        })
+        .to(ball.position, {
+          duration: 1,
+          ease: "power1.out",
+          y: 3,
+          z: 0,
+        })
+        .repeat(-1);
+
+      function animate() {
+        controls.update();
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        stats.update();
+      }
+
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,235 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        box-sizing: border-box;
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          #4158d0 0%,
+          #c850c0 46%,
+          #ffcc70 100%
+        );
+      }
+
+      #three {
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/",
+          "lil-gui": "https://unpkg.com/lil-gui@0.16.1/dist/lil-gui.esm.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      /** @format */
+
+      import * as THREE from "three";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+      import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+      import * as dat from "lil-gui";
+
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+      });
+
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap; // optional, for softer shadows
+      renderer.setClearColor(0x6dd1ff, 0);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(20, 20, 2),
+        new THREE.MeshStandardMaterial({
+          color: 0xa6a6a6,
+          side: THREE.DoubleSide,
+          // blending: THREE.MultiplyBlending,
+        })
+      );
+
+      plane.rotation.x = Math.PI * 0.5;
+      plane.position.y = -0.001;
+      scene.add(plane);
+      plane.receiveShadow = true;
+
+      const loader = new GLTFLoader();
+
+      // 모델 객체를 저장할 변수
+      let shop;
+      let cloud;
+
+      loader.load(
+        "./models/shop/scene.gltf",
+        (gltf) => {
+          shop = gltf.scene;
+          // let count =0;    //개별 노드 검색하기 위해서 별도의 변수 생성
+          shop.traverse((node) => {
+            if (node instanceof THREE.Mesh) {
+              node.castShadow = true;
+              node.receiveShadow = true;
+              // count ++;  //traverse를 이용해서 각 노드에 있는 메시 탐색하며 카운트 증가
+              // if(count == 3) { // 4번째 노드를 찾으면 자바스크립트의 3는 4를 의미합니다. 0부터 시작하니까.
+              //   node.scale.set(2,2,2);   // 4번째 노드의 크기를 2배로 증가
+              // }
+              console.log(node);
+            }
+          });
+          scene.add(shop);
+          // 모델1에 대한 크기와 위치 변경
+          const shopScale = 0.5;
+          shop.scale.set(shopScale, shopScale, shopScale);
+          shop.position.set(0, 0, 0);
+        },
+        (xhr) => {
+          console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+        },
+        (error) => {
+          console.error(`An error happened: ${error}`);
+        }
+      );
+
+      loader.load(
+        "./models/cloud/scene.gltf",
+        (gltf) => {
+          cloud = gltf.scene;
+          // cloud.traverse((node) => {
+          //   if (node instanceof THREE.Mesh) {
+          //     node.castShadow = true;
+          //     node.receiveShadow = true;
+          //   }
+          // });
+          scene.add(cloud);
+          // 모델2에 대한 크기와 위치 변경
+          const cloudScale = 0.3;
+          cloud.scale.set(cloudScale, cloudScale, cloudScale);
+          cloud.position.set(0, 2, 0);
+        },
+        (xhr) => {
+          console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+        },
+        (error) => {
+          console.error(`An error happened: ${error}`);
+        }
+      );
+
+      //add ambient light
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      // add light
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(2, 2, 2);
+      light.castShadow = true;
+      scene.add(light);
+
+      document.addEventListener("mousedown", onMouseDown, false);
+
+      let originalScale = null;
+
+      function onMouseDown(event) {
+        // 마우스 클릭 위치를 정규화된 장치 좌표(NDC, Normalized Device Coordinates)로 변환합니다.
+        const mouse = new THREE.Vector2();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // 광선(Ray)을 생성합니다.
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+
+        // 광선과 교차하는 객체들을 가져옵니다.
+        const intersects = raycaster.intersectObjects(scene.children, true);
+
+        // 교차한 객체 중에서 마우스 클릭 위치에 가장 가까운 객체를 찾습니다.
+        if (intersects.length > 0) {
+          const clickedObject = intersects[0].object;
+          // 클릭된 객체에 대한 처리를 수행합니다.
+          if (!originalScale) {
+            // 현재 크기를 저장합니다.
+            originalScale = clickedObject.scale.clone();
+            // 클릭한 객체를 커지게 만듭니다.
+            clickedObject.scale.set(2, 2, 2); // 원하는 크기로 설정합니다.
+          } else {
+            // 저장된 원래 크기로 돌아갑니다.
+            clickedObject.scale.copy(originalScale);
+            // 저장된 크기를 null로 초기화합니다.
+            originalScale = null;
+          }
+        }
+      }
+
+      // const gui = new dat.GUI();
+
+      // const lightFolder = gui.addFolder("Light Position");
+      // lightFolder.add(light.position, "x", -10, 10);
+      // lightFolder.add(light.position, "y", -10, 10);
+      // lightFolder.add(light.position, "z", -10, 10);
+      // lightFolder.add(light, "intensity", 0, 1);
+
+      // const helper = new THREE.DirectionalLightHelper(light, 1);
+      // scene.add(helper);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      // controls.autoRotate = true;
+      // controls.autoRotateSpeed = 0.2;
+      // controls.enableRotate = false;
+
+      camera.position.set(1, 2, 3);
+
+      const clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsed = clock.getElapsedTime();
+
+        controls.update();
+        renderer.render(scene, camera);
+        // console.log(camera.position);
+      }
+
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+      #three {
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/",
+          "lil-gui": "https://unpkg.com/lil-gui@0.16.1/dist/lil-gui.esm.js"
+        }
+      }
+    </script>
+    <script type="module">
+      /** @format */
+
+      import * as THREE from "three";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+      import * as dat from "lil-gui";
+
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // 큐브맵 로더를 생성
+      const loader = new THREE.CubeTextureLoader();
+
+      const gui = new dat.GUI();
+
+      //이미지 경로를 배열에 담음
+      const path = "./textures/0/";
+      const format = ".jpg";
+      const urls = [
+        path + "px" + format,
+        path + "nx" + format,
+        path + "py" + format,
+        path + "ny" + format,
+        path + "pz" + format,
+        path + "nz" + format,
+      ];
+
+      const textureCube = new THREE.CubeTextureLoader().load(urls);
+
+      scene.background = textureCube;
+
+      // 큐브추가
+
+      const cube = new THREE.Mesh(
+        new THREE.BoxGeometry(1, 1, 1),
+        new THREE.MeshPhongMaterial({
+          color: 0xffffff,
+          envMap: textureCube,
+          side: THREE.DoubleSide,
+        })
+      );
+
+      scene.add(cube);
+      cube.position.x = -1.5;
+      cube.castShadow = true;
+
+      // 구체 추가
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 32, 32),
+        new THREE.MeshPhongMaterial({
+          color: 0xffffff,
+          envMap: textureCube,
+          side: THREE.DoubleSide,
+        })
+      );
+
+      scene.add(sphere);
+      sphere.position.x = 1.5;
+      sphere.castShadow = true;
+
+      // torus knot 추가
+      const torusKnot = new THREE.Mesh(
+        new THREE.TorusKnotGeometry(0.5, 0.2, 64, 64),
+        new THREE.MeshPhongMaterial({
+          color: 0xffffff,
+          envMap: textureCube,
+          side: THREE.DoubleSide,
+        })
+      );
+      torusKnot.castShadow = true;
+      scene.add(torusKnot);
+
+      // 평면 추가
+      // 평면에 그림자 추가
+      const plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(20, 20, 20),
+        new THREE.MeshStandardMaterial({
+          color: "white",
+          side: THREE.DoubleSide,
+          blending: THREE.MultiplyBlending,
+        })
+      );
+
+      plane.receiveShadow = true;
+
+      plane.rotation.x = Math.PI * 0.5;
+      plane.position.y = -3;
+
+      scene.add(plane);
+
+      // 주광 추가
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const light = new THREE.DirectionalLight(0xffffff, 0.5);
+      light.position.set(5, 7, -5);
+      scene.add(light);
+
+      light.castShadow = true;
+
+      const lightFolder = gui.addFolder("Light Position");
+      lightFolder.add(light.position, "x", -10, 10);
+      lightFolder.add(light.position, "y", -10, 10);
+      lightFolder.add(light.position, "z", -10, 10);
+      lightFolder.add(light, "intensity", 0, 1);
+
+      const helper = new THREE.DirectionalLightHelper(light, 1);
+      scene.add(helper);
+
+      const helperFolder = gui.addFolder("Helper");
+      helperFolder.add(helper, "visible").name("Show Helper");
+
+      camera.position.set(1, 1, 3);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      // Limit orbit control rotation
+      controls.minPolarAngle = 0;
+      controls.maxPolarAngle = Math.PI / 2;
+
+      const clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsed = clock.getElapsedTime();
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  </body>
+</html>

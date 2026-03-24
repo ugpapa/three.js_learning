@@ -1,0 +1,312 @@
+:root {
+  --showcase-bg: #07111e;
+  --showcase-surface: rgba(12, 28, 49, 0.78);
+  --showcase-surface-strong: rgba(10, 21, 39, 0.92);
+  --showcase-line: rgba(255, 255, 255, 0.08);
+  --showcase-text: #f4f7fb;
+  --showcase-muted: #aab7c8;
+  --showcase-accent: #f97316;
+  --showcase-accent-soft: rgba(249, 115, 22, 0.18);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.showcase-page {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--showcase-text);
+  background:
+    radial-gradient(circle at top left, rgba(249, 115, 22, 0.16), transparent 28%),
+    radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.18), transparent 22%),
+    linear-gradient(180deg, #040b13 0%, #081321 100%);
+  font-family: "Avenir Next", "Noto Sans KR", sans-serif;
+}
+
+.showcase-page::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  content: "";
+  pointer-events: none;
+}
+
+.showcase-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--showcase-line);
+  backdrop-filter: blur(18px);
+  background: rgba(4, 11, 19, 0.72);
+}
+
+.showcase-nav .navbar-brand,
+.showcase-nav .nav-link,
+.showcase-nav .navbar-toggler {
+  color: var(--showcase-text);
+}
+
+.showcase-nav .nav-link {
+  opacity: 0.8;
+}
+
+.showcase-nav .nav-link:hover {
+  opacity: 1;
+}
+
+.hero-section,
+.catalog-section,
+.workflow-section {
+  padding: 5.5rem 0;
+}
+
+.eyebrow {
+  margin-bottom: 1rem;
+  color: #fbbf24;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.display-title {
+  margin-bottom: 1.5rem;
+  font-size: clamp(2.7rem, 6vw, 5.6rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+}
+
+.display-title span {
+  display: inline-block;
+  color: #8ec5ff;
+}
+
+.hero-copy,
+.section-heading p,
+.workflow-panel p,
+.workflow-item p,
+.showcase-card__body p {
+  color: var(--showcase-muted);
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.btn-accent {
+  border: 1px solid transparent;
+  background: var(--showcase-accent);
+  color: #fff;
+}
+
+.btn-accent:hover {
+  background: #fb923c;
+  color: #fff;
+}
+
+.hero-metrics {
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 2.5rem 0 0;
+  list-style: none;
+}
+
+.hero-metrics li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 120px;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--showcase-line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hero-metrics strong {
+  font-size: 1.6rem;
+}
+
+.hero-metrics span {
+  color: var(--showcase-muted);
+  font-size: 0.95rem;
+}
+
+.hero-stage,
+.showcase-card,
+.workflow-panel,
+.workflow-item {
+  border: 1px solid var(--showcase-line);
+  background: var(--showcase-surface);
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(14px);
+}
+
+.hero-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: 620px;
+  padding: 1.5rem;
+  border-radius: 32px;
+}
+
+.hero-stage::before,
+.showcase-card::before {
+  position: absolute;
+  inset: auto auto 0 0;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, var(--showcase-accent-soft), transparent 72%);
+  content: "";
+  pointer-events: none;
+}
+
+.hero-stage canvas,
+.showcase-card__canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stage-copy {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  max-width: 280px;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(7, 17, 30, 0.72);
+}
+
+.stage-copy span {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #93c5fd;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.section-heading {
+  max-width: 760px;
+  margin-bottom: 2.5rem;
+}
+
+.section-heading h2,
+.workflow-panel h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.showcase-card {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  border-radius: 28px;
+}
+
+.showcase-card__canvas {
+  height: 320px;
+  padding: 1rem;
+}
+
+.showcase-card__body {
+  padding: 0 1.5rem 1.6rem;
+}
+
+.showcase-card__body .label {
+  margin-bottom: 0.6rem;
+  color: #93c5fd;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.showcase-card__body h3 {
+  margin-bottom: 0.9rem;
+  font-size: 1.55rem;
+  font-weight: 700;
+}
+
+.workflow-panel {
+  height: 100%;
+  padding: 2rem;
+  border-radius: 28px;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.workflow-item {
+  height: 100%;
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: var(--showcase-surface-strong);
+}
+
+.workflow-item span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--showcase-accent-soft);
+  color: #fdba74;
+  font-weight: 700;
+}
+
+.workflow-item h3 {
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 991.98px) {
+  .hero-stage {
+    min-height: 460px;
+  }
+
+  .showcase-nav .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .hero-section,
+  .catalog-section,
+  .workflow-section {
+    padding: 4rem 0;
+  }
+
+  .hero-metrics {
+    flex-direction: column;
+  }
+
+  .workflow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .showcase-card__canvas {
+    height: 260px;
+  }
+}

@@ -1,0 +1,244 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+      #three {
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/",
+          "lil-gui": "https://unpkg.com/lil-gui@0.16.1/dist/lil-gui.esm.js"
+        }
+      }
+    </script>
+    <script type="module">
+      /** @format */
+
+      import * as THREE from "three";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+      import * as dat from "lil-gui";
+
+      // console.log(dat);
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // add gui to control particle number with function .onchange method
+      const gui = new dat.GUI();
+
+      const particleGroup = gui.addFolder("Particle Settings");
+
+      const particles = new THREE.BufferGeometry();
+      let count = 1000;
+      //  파티클이 생성되는 부분을 함수로 변경함.
+      function addParticles() {
+        const positions = new Float32Array(count * 3);
+        const colors = new Float32Array(count * 3);
+
+        for (let i = 0; i < count * 3; i++) {
+          positions[i] = (Math.random() - 0.5) * 100;
+          colors[i] = Math.random();
+        }
+        particles.setAttribute(
+          "position",
+          new THREE.BufferAttribute(positions, 3)
+        );
+        particles.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+      }
+      const particleNumbers = {
+        numbers: 1000,
+      };
+      particleGroup
+        .add(particleNumbers, "numbers", 1000, 50000)
+        .onChange((value) => {
+          count = value;
+          addParticles();
+        });
+      addParticles();
+      const textureLoader = new THREE.TextureLoader();
+      const particleTexture = textureLoader.load("./particles/8.png");
+
+      const particleMaterial = new THREE.PointsMaterial({
+        map: particleTexture,
+        blending: THREE.AdditiveBlending,
+      });
+
+      particleGroup
+        .add(particleMaterial, "size", 0.01, 1, 0.1)
+        .onFinishChange(() => {
+          particleMaterial.needsUpdate = true;
+        });
+      particleGroup.add(particleMaterial, "sizeAttenuation").onChange(() => {
+        particleMaterial.needsUpdate = true;
+      });
+      particleGroup.add(particleMaterial, "vertexColors").onChange(() => {
+        particleMaterial.needsUpdate = true;
+      });
+      particleGroup.add(particleMaterial, "depthTest").onChange(() => {
+        particleMaterial.needsUpdate = true;
+      });
+      particleGroup.add(particleMaterial, "depthWrite").onChange(() => {
+        particleMaterial.needsUpdate = true;
+      });
+      particleGroup.add(particleMaterial, "transparent").onChange(() => {
+        particleMaterial.needsUpdate = true;
+      });
+      particleGroup
+        .add(particleMaterial, "blending", {
+          No: THREE.NoBlending,
+          Normal: THREE.NormalBlending,
+          Additive: THREE.AdditiveBlending,
+          Subtractive: THREE.SubtractiveBlending,
+          Multiply: THREE.MultiplyBlending,
+          Custom: THREE.CustomBlending,
+        })
+        .onChange(() => {
+          particleMaterial.needsUpdate = true;
+        });
+
+      const particleSystem = new THREE.Points(particles, particleMaterial);
+      scene.add(particleSystem);
+
+      //make sun sphere width control sphere size  by lil-gui only radius size
+      const textureNames = ["sun.jpg", "earth.jpg", "moon.jpg"];
+      const textures = {};
+
+      textureNames.forEach((name) => {
+        textures[name] = textureLoader.load(`./textures/${name}`);
+      });
+
+      let currentTexture = textures["sun.jpg"];
+
+      const sun = new THREE.Mesh(
+        new THREE.SphereGeometry(5, 32, 32),
+        new THREE.MeshBasicMaterial({ color: 0xffffff, map: currentTexture })
+      );
+
+      // previous code to make sun sphere
+      // const sunTexture = textureLoader.load("./textures/sun.jpg");
+      // const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
+      // const sunMaterial = new THREE.MeshBasicMaterial({
+      //   color: 0xffff00,
+      //   map: sunTexture,
+      // });
+      // const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+
+      scene.add(sun);
+
+      const sunFolder = gui.addFolder("Sun Settings");
+      sunFolder.add(sun.position, "x", -100, 100, 1);
+      sunFolder.add(sun.position, "y", -100, 100, 1);
+      sunFolder.add(sun.position, "z", -100, 100, 1);
+
+      sun.material.wireframe = false;
+      sunFolder.add(sun.material, "wireframe").onChange(() => {
+        sun.material.needsUpdate = true;
+      });
+
+      sunFolder
+        .add({ texture: "sun.jpg" }, "texture", textureNames)
+        .onChange((value) => {
+          currentTexture = textures[value];
+          sun.material.map = currentTexture;
+          sun.material.needsUpdate = true;
+        });
+
+      const sunGeometryParams = {
+        radius: 5,
+        widthSegments: 32,
+        heightSegments: 32,
+      };
+
+      const radiusController = sunFolder
+        .add(sunGeometryParams, "radius", 1, 30)
+        .onChange((value) => {
+          sun.geometry = new THREE.SphereGeometry(
+            value,
+            sunGeometryParams.widthSegments,
+            sunGeometryParams.heightSegments
+          );
+        });
+
+      const widthSegmentsController = sunFolder
+        .add(sunGeometryParams, "widthSegments", 3, 64)
+        .onChange((value) => {
+          sun.geometry = new THREE.SphereGeometry(
+            sunGeometryParams.radius,
+            value,
+            sunGeometryParams.heightSegments
+          );
+        });
+
+      const heightSegmentsController = sunFolder
+        .add(sunGeometryParams, "heightSegments", 2, 64)
+        .onChange((value) => {
+          sun.geometry = new THREE.SphereGeometry(
+            sunGeometryParams.radius,
+            sunGeometryParams.widthSegments,
+            value
+          );
+        });
+
+      // add orbit control
+      const controls = new OrbitControls(camera, renderer.domElement);
+      camera.position.set(0, 0, 40);
+      controls.update();
+
+      const setSpeed = {
+        particleRotationSpeed: 0.005,
+        sunRotationSpeed: 0.001,
+      };
+      sunFolder.add(setSpeed, "particleRotationSpeed", -0.05, 0.05); // Min and max values for speed
+      sunFolder.add(setSpeed, "sunRotationSpeed", -0.01, 0.01);
+
+      // make animate function and add gui to control the animation
+      const animate = () => {
+        requestAnimationFrame(animate);
+        particleSystem.rotation.y += setSpeed.particleRotationSpeed;
+        sun.rotation.y += setSpeed.sunRotationSpeed;
+
+        renderer.render(scene, camera);
+      };
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  </body>
+</html>

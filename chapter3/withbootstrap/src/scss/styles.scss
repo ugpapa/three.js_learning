@@ -1,0 +1,45 @@
+// Import all of Bootstrap's CSS
+@import "~bootstrap/scss/bootstrap";
+
+canvas {
+    width: 60% !important;
+    height: 60% !important;
+    background-color: black;
+}
+
+.carousel-inner {
+    overflow: hidden;
+    position: relative;
+    height: 500px;
+
+    canvas {
+        position: relative;
+        top: -80px;
+
+        &.right {
+            left: 500px;
+        }
+
+        &.left {
+            right: 100px;
+        }
+    }
+
+    .text-box {
+        position: absolute;
+        top: 150px;
+        right: 130px;
+        width: 500px;
+        color: white;
+
+        &.text-left {
+            left: 150px;
+        }
+        h1{
+            text-transform: uppercase;
+        }
+        p {
+            font-size: 1.25rem;
+        }
+    }
+}

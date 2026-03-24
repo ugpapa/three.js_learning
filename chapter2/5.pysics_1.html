@@ -1,0 +1,148 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+      #three {
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+      #showBall {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        z-index: 10;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        background: #111827;
+        color: white;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="showBall">볼 낙하</button>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/",
+          "cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+        }
+      }
+    </script>
+    <script type="module">
+      /** @format */
+
+      import * as THREE from "three";
+      import * as CANNON from "cannon-es";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+
+      const world = new CANNON.World();
+      world.gravity.set(0, -9.82, 0);
+
+      const groundMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(10, 10),
+        new THREE.MeshStandardMaterial({
+          color: 0xdddddd,
+          side: THREE.DoubleSide,
+        })
+      );
+      groundMesh.rotation.x = Math.PI * -0.5;
+      groundMesh.receiveShadow = true;
+      scene.add(groundMesh);
+
+      const groundBody = new CANNON.Body({
+        mass: 0,
+        shape: new CANNON.Plane(),
+      });
+      groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+      world.addBody(groundBody);
+
+      const sphereMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 32, 32),
+        new THREE.MeshStandardMaterial({ color: 0xff6b6b })
+      );
+      sphereMesh.castShadow = true;
+      scene.add(sphereMesh);
+
+      const sphereBody = new CANNON.Body({
+        mass: 1,
+        shape: new CANNON.Sphere(0.5),
+      });
+      sphereBody.position.set(0, 5, 0);
+      world.addBody(sphereBody);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambientLight);
+
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(5, 8, 5);
+      light.castShadow = true;
+      scene.add(light);
+
+      document.getElementById("showBall").addEventListener("click", () => {
+        sphereBody.position.set(0, 5, 0);
+        sphereBody.velocity.set(0, 0, 0);
+        sphereBody.angularVelocity.set(0, 0, 0);
+      });
+
+      camera.position.set(4, 4, 6);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+
+      const clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+        world.step(1 / 60, delta, 3);
+
+        sphereMesh.position.copy(sphereBody.position);
+        sphereMesh.quaternion.copy(sphereBody.quaternion);
+
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  </body>
+</html>

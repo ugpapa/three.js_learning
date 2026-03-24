@@ -1,0 +1,11 @@
+Model Information:
+* title:	Clouds low poly
+* source:	https://sketchfab.com/3d-models/clouds-low-poly-ec0f02c154354a8c93f727ce896ef2ad
+* author:	willbotstudios (https://sketchfab.com/willbotstudios)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Clouds low poly" (https://sketchfab.com/3d-models/clouds-low-poly-ec0f02c154354a8c93f727ce896ef2ad) by willbotstudios (https://sketchfab.com/willbotstudios) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,109 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+      #three {
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      /** @format */
+
+      import * as THREE from "three";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+      import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x6dd1ff);
+
+      // 새로운 GLTFLoader 인스턴스를 생성
+      const loader = new GLTFLoader();
+
+      loader.load(
+        // 모델의 URL
+        "./models/shop/scene.gltf",
+        // onLoad 콜백
+        (gltf) => {
+          // 모델이 로드되면, 그 모델을 씬에 추가
+          scene.add(gltf.scene);
+        },
+        // onProgress 콜백
+        (xhr) => {
+          console.log(`Model ${(xhr.loaded / xhr.total) * 100}% loaded`);
+        },
+        // onError 콜백
+        (error) => {
+          console.error("An error occurred", error);
+        }
+      );
+
+      // 주광 추가
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const light = new THREE.DirectionalLight(0xffffff, 0.5);
+      light.position.set(5, 7, 5);
+      scene.add(light);
+
+      camera.position.set(1, 2, 3);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+
+      const clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsed = clock.getElapsedTime();
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  </body>
+</html>

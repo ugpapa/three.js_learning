@@ -1,0 +1,14 @@
+.DS_Store
+**/.DS_Store
+
+node_modules/
+**/node_modules/
+
+.qodo/
+**/.qodo/
+
+*.zip
+
+.idea/
+.vscode/
+chapter2/glb/huaranhuay.glb
