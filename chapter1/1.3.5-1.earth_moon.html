@@ -1,0 +1,155 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  <link rel="stylesheet" href="/three.js_learning/shared/example-nav.css" />
+</head>
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import Stats from "three/examples/jsm/libs/stats.module"; // 애니메이션 프레임 표시
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const loader = new THREE.TextureLoader();
+
+      const gigu = [];
+
+      const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+      const material = new THREE.MeshPhongMaterial({
+        color: "white",
+        map: loader.load("./textures/earth.jpg"),
+        bumpMap: loader.load("./textures/earth_bump.jpg"),
+        bumpScale: 0.2,
+        specularMap: loader.load("./textures/specular.jpg"),
+        specular: "grey",
+      });
+      const earth = new THREE.Mesh(geometry, material);
+
+      earth.position.set(0, 0, 0);
+      scene.add(earth);
+      gigu.push(earth);
+
+      const cloudGeometry = new THREE.SphereGeometry(0.51, 32, 32);
+      const cloudMaterial = new THREE.MeshPhongMaterial({
+        map: loader.load("./textures/cloud.png"),
+        side: THREE.DoubleSide,
+        opacity: 0.8,
+        transparent: true,
+        depthWrite: false,
+      });
+      const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
+      earth.add(cloudMesh);
+
+      const moonOrbit = new THREE.Object3D();
+      moonOrbit.position.x = 3;
+      // earth.add(moonOrbit);
+      scene.add(moonOrbit);
+      gigu.push(moonOrbit);
+
+      const moonGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+      const moonMaterial = new THREE.MeshPhongMaterial({
+        color: "white",
+        map: loader.load("./textures/moonmap.jpg"),
+        bumpMap: loader.load("./textures/moon_bump.jpg"),
+        bumpScale: 0.1,
+      });
+      const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+
+      moon.scale.set(0.25, 0.25, 0.25);
+      moonOrbit.add(moon);
+      gigu.push(moon);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const light = new THREE.DirectionalLight(0xffffff, 0.5);
+      light.position.set(5, 5, 0);
+      light.castShadow = true;
+      scene.add(light);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+
+      const clock = new THREE.Clock();
+      let delta = 0;
+      let time = 0;
+
+      const stats = Stats();
+      document.body.appendChild(stats.dom);
+
+      camera.position.z = 2;
+      const moonOrbit_offset = { x: 3, y: 0, z: 3 };
+      const moonOrbit_speed = 0.5;
+
+      function animate() {
+        delta = clock.getDelta();
+        time += delta;
+        requestAnimationFrame(animate);
+        earth.rotation.y += delta * 0.5;
+        cloudMesh.rotation.y += delta * 0.02;
+        moonOrbit.position.x =
+          moonOrbit_offset.x * Math.cos(time * moonOrbit_speed);
+        moonOrbit.position.z =
+          moonOrbit_offset.z * Math.sin(time * moonOrbit_speed);
+        moonOrbit.position.y = moonOrbit_offset.y;
+        renderer.render(scene, camera);
+        stats.update();
+      }
+
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  <script src="/three.js_learning/shared/example-nav.js" data-example-nav="true" data-site-root="/three.js_learning"></script>
+</body>
+</html>

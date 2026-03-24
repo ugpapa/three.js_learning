@@ -1,0 +1,158 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+      #three {
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+    </style>
+  <link rel="stylesheet" href="/three.js_learning/shared/example-nav.css" />
+</head>
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/",
+          "lil-gui": "https://unpkg.com/lil-gui@0.16.1/dist/lil-gui.esm.js"
+        }
+      }
+    </script>
+    <script type="module">
+      /** @format */
+
+      import * as THREE from "three";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+      import * as lil from "lil-gui";
+
+      // console.log(dat);
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const gui = new lil.GUI();
+      
+      // 입자들을 연결하는 선을 생성할 먼저 BufferGeometry를 만듭니다.
+      const lineGeometry = new THREE.BufferGeometry();
+      function updateLineSegments() {
+        lineGeometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(particles.attributes.position.array, 3)
+        );
+        lineGeometry.attributes.position.needsUpdate = true;
+      }
+
+      // 선의 머티리얼을 생성합니다.
+      const lineMaterial = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.5,
+      });
+
+      // LineSegments를 생성하여 입자들을 연결하는 선을 만듭니다.
+      const lineSegments = new THREE.LineSegments(lineGeometry, lineMaterial);
+
+      // scene에 lineSegments를 추가합니다.
+      scene.add(lineSegments);
+
+      const particles = new THREE.BufferGeometry();
+      let count = 1000;
+
+      //  파티클이 생성되는 부분을 함수로 변경함.
+      function addParticles() {
+        const positions = new Float32Array(count * 3);
+        const colors = new Float32Array(count * 3);
+
+        for (let i = 0; i < count * 3; i++) {
+          positions[i] = (Math.random() - 0.5) * 100;
+          colors[i] = Math.random();
+        }
+        particles.setAttribute(
+          "position",
+          new THREE.BufferAttribute(positions, 3)
+        );
+        particles.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+        lineGeometry.setAttribute(
+          "color",
+          new THREE.BufferAttribute(colors, 3)
+        );
+        updateLineSegments();
+      } // 여기까지 function 으로 변경
+      const particleNumbers = {
+        numbers: 1000,
+      };
+      gui.add(particleNumbers, "numbers", 1000, 50000).name("파티클 갯수").onChange((value) => {
+        count = value;
+        addParticles();
+      });
+
+      addParticles();
+
+      // const textureLoader = new THREE.TextureLoader();
+      // const particleTexture = textureLoader.load("/textures/particles/5.png");
+
+      const particleMaterial = new THREE.PointsMaterial({
+        size: 0.5,
+        vertexColors: true,
+      });
+      gui
+        .add(particleMaterial, "size", 0.1, 1, 0.1)
+        .name("파티클 크기")
+        .onFinishChange(() => {
+          particleMaterial.needsUpdate = true;
+        });
+      const particleSystem = new THREE.Points(particles, particleMaterial);
+      scene.add(particleSystem);
+
+      // add orbit control
+      const controls = new OrbitControls(camera, renderer.domElement);
+      camera.position.set(0, 0, 100);
+      controls.update();
+
+      // make animate function and add gui to control the animation
+      const animate = () => {
+        requestAnimationFrame(animate);
+        particleSystem.rotation.y += 0.005;
+        lineSegments.rotation.y += 0.005;
+
+        renderer.render(scene, camera);
+        // sun.rotation.y += 0.005;
+      };
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  <script src="/three.js_learning/shared/example-nav.js" data-example-nav="true" data-site-root="/three.js_learning"></script>
+</body>
+</html>

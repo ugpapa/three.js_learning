@@ -1,0 +1,124 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three sample</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  <link rel="stylesheet" href="/three.js_learning/shared/example-nav.css" />
+</head>
+  <body>
+    <canvas id="three"></canvas>
+    <script
+      defer
+      src="https://ga.jspm.io/npm:es-module-shims@1.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.147.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import Stats from "three/examples/jsm/libs/stats.module"; // 애니메이션 프레임 표시
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+      const scene = new THREE.Scene();
+      const canvas = document.querySelector("#three");
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const loader = new THREE.TextureLoader();
+
+      const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+      const material = new THREE.MeshPhongMaterial({
+        color: "white",
+        map: loader.load("./textures/earth.jpg"),
+        bumpMap: loader.load("./textures/earth_bump.jpg"),
+        bumpScale: 0.2,
+        specularMap: loader.load("./textures/specular.jpg"),
+        specular: "grey",
+      });
+      const earth = new THREE.Mesh(geometry, material);
+
+      earth.position.set(0, 0, 0);
+      scene.add(earth);
+
+      const cloudGeometry = new THREE.SphereGeometry(0.51, 32, 32);
+      const cloudMaterial = new THREE.MeshStandardMaterial({
+        map: loader.load("./textures/cloud.png"),
+        side: THREE.DoubleSide,
+        opacity: 0.7,
+        transparent: true,
+      });
+      const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
+      earth.add(cloudMesh);
+
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const light = new THREE.DirectionalLight(0xffffff, 0.5);
+      light.position.set(5, 5, 0);
+      light.castShadow = true;
+      scene.add(light);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+
+      const clock = new THREE.Clock();
+      let delta = 0;
+
+      const stats = Stats(); //애니메이션 프레임 표시
+      document.body.appendChild(stats.dom);
+
+      camera.position.z = 2;
+
+      function animate() {
+        delta = clock.getDelta();
+        requestAnimationFrame(animate);
+        earth.rotation.y += delta * 0.1;
+        cloudMesh.rotation.y += delta * 0.02;
+        renderer.render(scene, camera);
+        stats.update();
+      }
+
+      animate();
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      window.addEventListener("resize", onWindowResize);
+    </script>
+  <script src="/three.js_learning/shared/example-nav.js" data-example-nav="true" data-site-root="/three.js_learning"></script>
+</body>
+</html>
