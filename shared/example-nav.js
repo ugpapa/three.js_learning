@@ -1,8 +1,11 @@
 (function () {
   const currentScript =
     document.currentScript || document.querySelector("script[data-example-nav='true']");
-  const siteRoot = currentScript?.dataset.siteRoot || "/";
+  const siteRoot = (currentScript?.dataset.siteRoot || "/three.js_learning").replace(/\/+$/, "");
   const pathname = window.location.pathname;
+  const normalizedPath = pathname.startsWith(siteRoot)
+    ? pathname.slice(siteRoot.length) || "/"
+    : pathname;
   const portalPages = new Set([
     "/index.html",
     "/chapter1/index.html",
@@ -12,21 +15,16 @@
     "/",
   ]);
 
-  if (portalPages.has(pathname)) {
+  if (portalPages.has(normalizedPath)) {
     return;
   }
 
   function toRootHref(targetPath) {
     const normalizedTarget = targetPath.replace(/^\/+/, "");
-
-    if (siteRoot === "/") {
-      return `/${normalizedTarget}`;
-    }
-
-    return `${siteRoot}${normalizedTarget}`;
+    return `${siteRoot}/${normalizedTarget}`;
   }
 
-  const segments = pathname.split("/").filter(Boolean);
+  const segments = normalizedPath.split("/").filter(Boolean);
   const chapter = segments.find((segment) => /^chapter[1-4]$/.test(segment));
   const chapterHref = chapter ? toRootHref(`${chapter}/index.html`) : toRootHref("index.html");
   const exampleLabel = decodeURIComponent(segments.at(-1) || "example");

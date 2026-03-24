@@ -15,6 +15,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const OUT_DIR = resolve(ROOT, ".pages-site");
+const SITE_BASE = "/three.js_learning";
 
 const STATIC_COPIES = [
   "index.html",
@@ -93,11 +94,8 @@ function injectNav(html, htmlPath) {
     return html;
   }
 
-  const depth = relativePath.split("/").length - 1;
-  const siteRoot = depth === 0 ? "./" : "../".repeat(depth);
-  const cssHref = `${siteRoot}shared/example-nav.css`;
-  const scriptTag =
-    `<script src="${siteRoot}shared/example-nav.js" data-example-nav="true" data-site-root="${siteRoot}"></script>`;
+  const cssHref = `${SITE_BASE}/shared/example-nav.css`;
+  const scriptTag = `<script src="${SITE_BASE}/shared/example-nav.js" data-example-nav="true" data-site-root="${SITE_BASE}"></script>`;
   const cssTag = `<link rel="stylesheet" href="${cssHref}" />`;
 
   let nextHtml = html.includes("</head>")

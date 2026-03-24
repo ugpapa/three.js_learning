@@ -8,6 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const PORT = Number(process.env.PORT || 4173);
 const SHOULD_BUILD = !process.argv.includes("--skip-build");
+const SITE_BASE = (process.env.SITE_BASE || "/three.js_learning").replace(/\/+$/, "");
 
 if (SHOULD_BUILD) {
   const result = spawnSync("node", [resolve(__dirname, "build-showcases.mjs")], {
@@ -47,13 +48,7 @@ const CONTENT_TYPES = {
   ".bin": "application/octet-stream",
 };
 
-const portalPages = new Set([
-  "/index.html",
-  "/chapter1/index.html",
-  "/chapter2/index.html",
-  "/chapter3/index.html",
-  "/chapter4/index.html",
-]);
+const portalPages = new Set(["/index.html", "/chapter1/index.html", "/chapter2/index.html", "/chapter3/index.html", "/chapter4/index.html"]);
 
 function send(res, status, body, contentType) {
   res.writeHead(status, { "Content-Type": contentType });
@@ -64,6 +59,18 @@ function safePathname(urlPath) {
   const decoded = decodeURIComponent(urlPath.split("?")[0]);
   const normalizedPath = normalize(decoded).replace(/^(\.\.[/\\])+/, "");
   return normalizedPath.startsWith("/") ? normalizedPath : `/${normalizedPath}`;
+}
+
+function stripSiteBase(pathname) {
+  if (pathname === SITE_BASE || pathname === `${SITE_BASE}/`) {
+    return "/";
+  }
+
+  if (pathname.startsWith(`${SITE_BASE}/`)) {
+    return pathname.slice(SITE_BASE.length) || "/";
+  }
+
+  return pathname;
 }
 
 function resolveFile(pathname) {
@@ -92,9 +99,8 @@ function injectNav(html, pathname) {
     return html;
   }
 
-  const headInjection = '<link rel="stylesheet" href="/shared/example-nav.css" />';
-  const bodyInjection =
-    '<script src="/shared/example-nav.js" data-example-nav="true" data-site-root="/"></script>';
+  const headInjection = `<link rel="stylesheet" href="${SITE_BASE}/shared/example-nav.css" />`;
+  const bodyInjection = `<script src="${SITE_BASE}/shared/example-nav.js" data-example-nav="true" data-site-root="${SITE_BASE}"></script>`;
 
   let nextHtml = html;
   nextHtml = nextHtml.includes("</head>")
@@ -110,8 +116,9 @@ function injectNav(html, pathname) {
 
 const server = createServer((req, res) => {
   const pathname = safePathname(req.url || "/");
+  const appPathname = stripSiteBase(pathname);
 
-  if (pathname.startsWith("/.git")) {
+  if (appPathname.startsWith("/.git")) {
     send(
       res,
       404,
@@ -121,22 +128,22 @@ const server = createServer((req, res) => {
     return;
   }
 
-  if (pathname === "/favicon.ico") {
+  if (appPathname === "/favicon.ico") {
     send(res, 204, "", "text/plain; charset=utf-8");
     return;
   }
 
-  if (pathname === "/shared/example-nav.css") {
+  if (appPathname === "/shared/example-nav.css") {
     send(res, 200, navCss, CONTENT_TYPES[".css"]);
     return;
   }
 
-  if (pathname === "/shared/example-nav.js") {
+  if (appPathname === "/shared/example-nav.js") {
     send(res, 200, navJs, CONTENT_TYPES[".js"]);
     return;
   }
 
-  const filePath = resolveFile(pathname === "/" ? "/index.html" : pathname);
+  const filePath = resolveFile(appPathname === "/" ? "/index.html" : appPathname);
   if (!filePath.startsWith(ROOT) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
     send(
       res,
@@ -152,7 +159,7 @@ const server = createServer((req, res) => {
 
   if (extension === ".html") {
     const html = readFileSync(filePath, "utf8");
-    const htmlPathname = pathname === "/" ? "/index.html" : pathname;
+    const htmlPathname = appPathname === "/" ? "/index.html" : appPathname;
     send(res, 200, injectNav(html, htmlPathname), contentType);
     return;
   }
@@ -164,5 +171,6 @@ const server = createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`\n[serve] Three.js example hub running at http://127.0.0.1:${PORT}`);
+  console.log(`[serve] Site base path: ${SITE_BASE}`);
   console.log("[serve] Use Ctrl+C to stop the server.");
 });
