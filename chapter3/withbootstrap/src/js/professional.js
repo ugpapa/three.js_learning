@@ -111,6 +111,9 @@ function createViewer(config) {
     alpha: true,
   });
 
+  renderer.domElement.style.width = "100%";
+  renderer.domElement.style.height = "100%";
+  renderer.domElement.style.display = "block";
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -305,8 +308,9 @@ function frameViewer(viewer) {
 
 function resizeAll() {
   viewers.forEach((viewer) => {
-    const width = viewer.container.clientWidth;
-    const height = Math.max(260, viewer.canvasElement.clientHeight || viewer.container.clientHeight);
+    const bounds = viewer.container.getBoundingClientRect();
+    const width = Math.max(1, Math.round(bounds.width));
+    const height = Math.max(260, Math.round(bounds.height));
 
     viewer.camera.aspect = width / height;
     viewer.camera.updateProjectionMatrix();
