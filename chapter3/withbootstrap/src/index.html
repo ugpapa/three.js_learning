@@ -1,150 +1,303 @@
 <!-- @format -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap w/ Vite</title>
+    <title>Chapter 3 Showcase Lab</title>
   </head>
-  <body>
-    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+  <body class="landing-page">
+    <nav class="navbar navbar-expand-lg showcase-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="./index.html">Chapter 3 Lab</a>
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+          data-bs-target="#mainNav"
+          aria-controls="mainNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#viewer">Viewer</a></li>
+            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#models">Models</a></li>
+            <li class="nav-item"><a class="nav-link" href="#links">Links</a></li>
           </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-light" type="submit">
-              Search
-            </button>
-          </form>
         </div>
       </div>
     </nav>
-    <div class="container-fluid bg-black">
-      <div class="container">
-        <div
-          id="carouselExampleControls"
-          class="carousel slide"
-          data-bs-ride="carousel"
-        >
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <canvas id="canvas1" class="right"></canvas>
-              <div class="text-box text-white text-left">
-                <h1>Title</h1>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Aperiam nulla quibusdam ipsam consectetur. Voluptatem
-                  perferendis sit incidunt eius nostrum maiores dolorum iure non
-                  quasi enim deleniti, ab, nesciunt assumenda ipsa.
-                </p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <canvas id="canvas2" class="left"></canvas>
-              <div class="text-box text-white">
-                <h1>Title</h1>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Aperiam nulla quibusdam ipsam consectetur. Voluptatem
-                  perferendis sit incidunt eius nostrum maiores dolorum iure non
-                  quasi enim deleniti, ab, nesciunt assumenda ipsa.
-                </p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <canvas id="canvas3" class="right"></canvas>
-              <div class="text-box text-white text-left">
-                <h1>Title</h1>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Aperiam nulla quibusdam ipsam consectetur. Voluptatem
-                  perferendis sit incidunt eius nostrum maiores dolorum iure non
-                  quasi enim deleniti, ab, nesciunt assumenda ipsa.
-                </p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <canvas id="canvas4" class="left"></canvas>
-              <div class="text-box text-white">
-                <h1>Title</h1>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Aperiam nulla quibusdam ipsam consectetur. Voluptatem
-                  perferendis sit incidunt eius nostrum maiores dolorum iure non
-                  quasi enim deleniti, ab, nesciunt assumenda ipsa.
-                </p>
-              </div>
+
+    <main>
+      <section id="viewer" class="hero-shell">
+        <div class="container">
+          <div class="hero-intro">
+            <span class="eyebrow">Three.js + Bootstrap Viewer</span>
+            <h1>3D 모델 쇼케이스를 실제 랜딩 페이지처럼 구성한 예제</h1>
+            <p>
+              한 화면 안에서 4개의 GLB 모델을 슬라이드로 확인하고, 아래 섹션에서
+              렌더링 방향과 연결 예제를 함께 볼 수 있게 정리했습니다.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-lg" href="./professional.html">Professional Demo</a>
+              <a class="btn btn-outline-light btn-lg" href="../../index.html">Chapter 3 Hub</a>
             </div>
           </div>
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleControls"
-            data-bs-slide="prev"
+
+          <div
+            id="carouselExampleControls"
+            class="carousel slide viewer-carousel"
+            data-bs-ride="carousel"
           >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleControls"
-            data-bs-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
+            <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Motion Hero"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide-to="1"
+                aria-label="Packaging"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide-to="2"
+                aria-label="Material"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide-to="3"
+                aria-label="Industrial"
+              ></button>
+            </div>
+
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <canvas id="canvas1" class="right"></canvas>
+                <div class="text-box text-white text-left">
+                  <span class="slide-label">Animated Asset</span>
+                  <h2>Motion Hero</h2>
+                  <p>
+                    애니메이션이 포함된 에셋을 첫 장면에 배치해 사용자의 시선을
+                    바로 끌어오는 랜딩 비주얼 구성을 테스트합니다.
+                  </p>
+                  <ul class="slide-meta">
+                    <li>GLB animation clip</li>
+                    <li>Auto rotation + idle light</li>
+                    <li>Bootstrap carousel integration</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="carousel-item">
+                <canvas id="canvas2" class="left"></canvas>
+                <div class="text-box text-white">
+                  <span class="slide-label">Packaging</span>
+                  <h2>Box Preview</h2>
+                  <p>
+                    제품 패키지나 프레임 구조처럼 실루엣이 분명한 모델을 큰 화면에
+                    놓고, 카피와 CTA를 옆에 붙이는 구성을 보여줍니다.
+                  </p>
+                  <ul class="slide-meta">
+                    <li>Centered framing</li>
+                    <li>Warm base spotlight</li>
+                    <li>Responsive viewer stage</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="carousel-item">
+                <canvas id="canvas3" class="right"></canvas>
+                <div class="text-box text-white text-left">
+                  <span class="slide-label">Material Study</span>
+                  <h2>Glass Volume</h2>
+                  <p>
+                    유광과 반투명 재질은 단색 배경보다 그라디언트 무드와 바닥
+                    반사가 있는 스테이지에서 훨씬 입체적으로 보입니다.
+                  </p>
+                  <ul class="slide-meta">
+                    <li>High contrast stage</li>
+                    <li>Specular highlight emphasis</li>
+                    <li>Material-driven presentation</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="carousel-item">
+                <canvas id="canvas4" class="left"></canvas>
+                <div class="text-box text-white">
+                  <span class="slide-label">Industrial</span>
+                  <h2>Metal Surface</h2>
+                  <p>
+                    금속성 모델은 패턴이 잘 보이도록 조금 더 차분한 배경과 넓은
+                    여백을 두는 편이 제품 카탈로그 톤에 가깝습니다.
+                  </p>
+                  <ul class="slide-meta">
+                    <li>Surface detail focus</li>
+                    <li>Soft fill + rim light</li>
+                    <li>Catalog-style composition</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleControls"
+              data-bs-slide="prev"
+            >
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleControls"
+              data-bs-slide="next"
+            >
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      <section id="features" class="content-section">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Feature System</span>
+            <h2>비어 보이던 하단을 실제 사이트 흐름으로 채운 구성</h2>
+            <p>
+              단순히 슬라이드만 놓지 않고, 바로 아래에 기능 설명과 활용 포인트를
+              이어 붙여 한 페이지 안에서 설계 의도를 읽을 수 있게 만들었습니다.
+            </p>
+          </div>
+
+          <div class="row g-4 feature-grid">
+            <div class="col-md-6 col-xl-3">
+              <article class="info-card">
+                <span>Scene Setup</span>
+                <strong>모델별 캔버스 분리</strong>
+                <p>각 슬라이드가 별도 Three.js 뷰어를 갖도록 구성해 모델별 연출을 쉽게 바꿀 수 있습니다.</p>
+              </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <article class="info-card">
+                <span>Responsive</span>
+                <strong>박스 기준 리사이즈</strong>
+                <p>윈도우 전체가 아니라 슬라이드 박스 크기를 기준으로 렌더러가 맞춰져 레이아웃이 덜 깨집니다.</p>
+              </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <article class="info-card">
+                <span>Lighting</span>
+                <strong>모델 성격별 무드</strong>
+                <p>재질과 형태에 따라 배경 톤과 하단 글로우를 달리해 같은 씬 구조를 반복 사용합니다.</p>
+              </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <article class="info-card">
+                <span>Storytelling</span>
+                <strong>텍스트와 CTA 연결</strong>
+                <p>예제 페이지처럼 보이지 않도록 설명 카드와 다음 링크를 함께 배치해 흐름을 만들었습니다.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="models" class="content-section content-section--dense">
+        <div class="container">
+          <div class="row g-4 align-items-stretch">
+            <div class="col-lg-7">
+              <article class="process-panel">
+                <span class="eyebrow">Pipeline</span>
+                <h2>한 페이지 안에서 모델 프리뷰와 후속 링크를 이어 붙인 구조</h2>
+                <div class="process-steps">
+                  <div class="process-step">
+                    <strong>01</strong>
+                    <div>
+                      <h3>Hero Viewer</h3>
+                      <p>대표 모델을 크게 노출해 첫 인상을 만들고 캐러셀로 여러 콘셉트를 순환합니다.</p>
+                    </div>
+                  </div>
+                  <div class="process-step">
+                    <strong>02</strong>
+                    <div>
+                      <h3>Feature Blocks</h3>
+                      <p>아래 섹션에서 씬 구성, 반응형 처리, 조명 방향을 카드 형태로 바로 설명합니다.</p>
+                    </div>
+                  </div>
+                  <div class="process-step">
+                    <strong>03</strong>
+                    <div>
+                      <h3>Deep Dive Links</h3>
+                      <p>Professional 페이지나 Chapter 3 허브로 이어서 사용자가 바로 다음 예제로 이동할 수 있습니다.</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-lg-5">
+              <article class="link-panel" id="links">
+                <span class="eyebrow">Direct Links</span>
+                <h2>연결된 예제를 바로 열기</h2>
+                <a class="link-panel__item" href="./professional.html">
+                  <strong>Professional Demo</strong>
+                  <span>카드형 3D 쇼케이스 랜딩으로 이동</span>
+                </a>
+                <a class="link-panel__item" href="../../project2/dist/index.html">
+                  <strong>Project 2 Bowling</strong>
+                  <span>물리, 핀, 사운드가 포함된 볼링 예제 묶음</span>
+                </a>
+                <a class="link-panel__item" href="../../sample/dist/index.html">
+                  <strong>Chapter 3 Sample</strong>
+                  <span>기본 샘플 장면을 따로 확인</span>
+                </a>
+                <a class="link-panel__item" href="../../../index.html">
+                  <strong>All Chapters Hub</strong>
+                  <span>배포된 전체 허브 홈으로 이동</span>
+                </a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <div class="container">
+          <div class="cta-band">
+            <div>
+              <span class="eyebrow">Chapter 3 Showcase</span>
+              <h2>예제 페이지가 아니라 작은 제품 사이트처럼 보이도록 마감</h2>
+              <p>
+                상단은 3D 프리뷰, 중단은 설계 설명, 하단은 이동 링크와 CTA로 채워서
+                빈 공간 없이 한 페이지 흐름이 이어지도록 구성했습니다.
+              </p>
+            </div>
+            <div class="cta-band__actions">
+              <a class="btn btn-light btn-lg" href="./professional.html">Open Professional</a>
+              <a class="btn btn-outline-light btn-lg" href="../../index.html">Back to Chapter 3</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
     <script type="module" src="./js/main.js"></script>
   </body>
 </html>
