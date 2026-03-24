@@ -8,7 +8,11 @@ node_modules/
 **/.qodo/
 
 *.zip
+firebase-debug.log
 
 .idea/
 .vscode/
+dist/
+**/dist/
+**/src/dist/
 chapter2/glb/huaranhuay.glb
