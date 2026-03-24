@@ -3,6 +3,32 @@
 Three.js 학습용 예제 모음 저장소입니다.  
 책 원고에서 사용하는 예제 코드를 장별로 정리해 두었습니다.
 
+## 한 번에 실행하기
+
+루트에서 한 번만 실행하면 chapter1부터 chapter4까지 예제를 한 서버에서 바로 볼 수 있습니다.
+
+```bash
+npm run dev
+```
+
+기본 주소는 `http://127.0.0.1:4173`입니다.
+
+이 명령은 아래 작업을 자동으로 처리합니다.
+
+- `chapter3/sample`
+- `chapter3/project1`
+- `chapter3/physics`
+- `chapter3/project2`
+- `chapter3/withbootstrap`
+- `chapter4/advanced-showcase`
+
+위 Vite 프로젝트를 먼저 빌드한 뒤,
+- 루트 허브 페이지
+- chapter별 목록 페이지
+- 각 예제 페이지의 `뒤로 / 챕터 목록 / 전체 홈` 공통 네비게이션
+
+까지 한 번에 제공합니다.
+
 ## 구성
 
 - `chapter1/`
@@ -18,86 +44,20 @@ Three.js 학습용 예제 모음 저장소입니다.
   - 고급 예제
   - 현재는 `advanced-showcase/` 드래곤 애니메이션 쇼케이스 포함
 
-## 실행 방법
+## 개별 빌드
 
-### chapter1, chapter2
-
-정적 파일 예제이므로 간단한 로컬 서버로 실행하면 됩니다.
-
-```bash
-cd chapter1
-python3 -m http.server 8000
-```
-
-또는
-
-```bash
-cd chapter2
-python3 -m http.server 8000
-```
-
-브라우저에서 원하는 HTML 파일을 직접 열면 됩니다.
-
-## Vite 프로젝트 실행
-
-### chapter3 sample
-
-```bash
-cd chapter3/sample
-npm install
-npm run dev
-```
-
-### chapter3 project1
-
-```bash
-cd chapter3/project1
-npm install
-npm run dev
-```
-
-### chapter3 physics
-
-```bash
-cd chapter3/physics
-npm install
-npm run dev
-```
-
-### chapter3 project2
-
-```bash
-cd chapter3/project2
-npm install
-npm run dev
-```
-
-### chapter3 withbootstrap
-
-```bash
-cd chapter3/withbootstrap
-npm install
-npm run dev
-```
-
-### chapter4 advanced-showcase
-
-```bash
-cd chapter4/advanced-showcase
-npm install
-npm run dev
-```
-
-## 빌드
-
-Vite 기반 프로젝트는 각 프로젝트 폴더에서 아래 명령으로 빌드합니다.
+기본 사용은 루트 `npm run dev`를 권장합니다.  
+다만 특정 Vite 프로젝트만 다시 빌드하고 싶다면 각 폴더에서 아래 명령을 실행하면 됩니다.
 
 ```bash
 npm run build
 ```
 
-빌드 산출물인 `dist/` 폴더는 저장소에 포함하지 않습니다.  
-예제 저장소는 소스 코드와 자산만 관리하고, 배포용 파일은 각 프로젝트에서 필요할 때 다시 생성합니다.
+루트에서 모든 쇼케이스를 다시 빌드만 하고 싶다면 아래 명령을 사용할 수 있습니다.
+
+```bash
+npm run build
+```
 
 ## 배포 대상
 

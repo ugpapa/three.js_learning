@@ -15,11 +15,16 @@ const showcaseEntries = [
     canvas: "#hero-canvas",
     card: ".hero-stage",
     model: "./models/BONBOX.glb",
-    targetSize: 5.4,
+    targetSize: 5.8,
     accent: 0xf97316,
     rotationSpeed: 0.35,
     floatSpeed: 1.2,
-    floatAmount: 0.18,
+    floatAmount: 0.14,
+    framePadding: 1.02,
+    heightFitFactor: 0.72,
+    cameraHeightBias: -0.02,
+    cameraSideBias: 0,
+    depthBias: 0.92,
   },
   {
     canvas: "#card-canvas-1",
@@ -29,7 +34,12 @@ const showcaseEntries = [
     accent: 0x93c5fd,
     rotationSpeed: 0.32,
     floatSpeed: 1.8,
-    floatAmount: 0.12,
+    floatAmount: 0.08,
+    framePadding: 0.98,
+    heightFitFactor: 0.56,
+    cameraHeightBias: -0.02,
+    cameraSideBias: 0,
+    depthBias: 0.86,
   },
   {
     canvas: "#card-canvas-2",
@@ -39,7 +49,12 @@ const showcaseEntries = [
     accent: 0xf59e0b,
     rotationSpeed: 0.28,
     floatSpeed: 1.4,
-    floatAmount: 0.1,
+    floatAmount: 0.07,
+    framePadding: 0.96,
+    heightFitFactor: 0.54,
+    cameraHeightBias: -0.01,
+    cameraSideBias: 0,
+    depthBias: 0.84,
   },
   {
     canvas: "#card-canvas-3",
@@ -49,7 +64,12 @@ const showcaseEntries = [
     accent: 0x38bdf8,
     rotationSpeed: 0.24,
     floatSpeed: 1.5,
-    floatAmount: 0.1,
+    floatAmount: 0.06,
+    framePadding: 0.94,
+    heightFitFactor: 0.5,
+    cameraHeightBias: 0,
+    cameraSideBias: 0,
+    depthBias: 0.82,
   },
   {
     canvas: "#card-canvas-4",
@@ -59,19 +79,32 @@ const showcaseEntries = [
     accent: 0xcbd5e1,
     rotationSpeed: 0.26,
     floatSpeed: 1.3,
-    floatAmount: 0.08,
+    floatAmount: 0.05,
+    framePadding: 0.94,
+    heightFitFactor: 0.5,
+    cameraHeightBias: 0,
+    cameraSideBias: 0,
+    depthBias: 0.82,
   },
 ];
 
-const viewers = showcaseEntries.map(createViewer);
+const viewers = showcaseEntries.map(createViewer).filter(Boolean);
 
-window.addEventListener("resize", resizeAll);
-resizeAll();
-animate();
+if (viewers.length > 0) {
+  window.addEventListener("resize", resizeAll);
+  resizeAll();
+  animate();
+}
 
 function createViewer(config) {
   const canvas = document.querySelector(config.canvas);
   const container = document.querySelector(config.card);
+
+  if (!canvas || !container) {
+    console.warn(`Skipped viewer setup for ${config.canvas}: missing container or canvas.`);
+    return null;
+  }
+
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
@@ -140,10 +173,14 @@ function createViewer(config) {
     scene,
     camera,
     pivot,
+    canvasElement: canvas,
     container,
+    platform,
+    halo,
     mixer: null,
     model: null,
     loaded: false,
+    baseModelY: 0,
     pointerX: 0,
     pointerY: 0,
     ...config,
@@ -183,15 +220,9 @@ function createViewer(config) {
       }
 
       content.add(normalized);
-
-      const cameraHeight = Math.max(1.5, config.targetSize * 0.55);
-      const cameraDistance = Math.max(6.5, config.targetSize * 2.05);
-
-      camera.position.set(config.targetSize * 0.12, cameraHeight, cameraDistance);
-      camera.lookAt(0, config.targetSize * 0.12, 0);
-
       state.model = normalized;
       state.loaded = true;
+      frameViewer(state);
     },
     undefined,
     (error) => {
@@ -229,16 +260,61 @@ function normalizeModel(model, targetSize) {
   return wrapper;
 }
 
+function frameViewer(viewer) {
+  if (!viewer.model) {
+    return;
+  }
+
+  const box = new THREE.Box3().setFromObject(viewer.model);
+  const size = new THREE.Vector3();
+  const center = new THREE.Vector3();
+
+  box.getSize(size);
+  box.getCenter(center);
+
+  const width = viewer.container.clientWidth;
+  const height = Math.max(260, viewer.canvasElement.clientHeight || viewer.container.clientHeight);
+  const aspect = width / height;
+  const fov = THREE.MathUtils.degToRad(viewer.camera.fov);
+
+  const fitHeightDistance = size.y / (2 * Math.tan(fov / 2));
+  const fitWidthDistance = size.x / (2 * aspect * Math.tan(fov / 2));
+  const distance =
+    Math.max(
+      fitWidthDistance,
+      fitHeightDistance * viewer.heightFitFactor,
+      size.z * 0.9
+    ) * viewer.framePadding;
+
+  viewer.camera.position.set(
+    center.x + size.x * viewer.cameraSideBias,
+    center.y + size.y * viewer.cameraHeightBias,
+    center.z + distance * viewer.depthBias
+  );
+  viewer.camera.lookAt(center.x, center.y + size.y * 0.02, center.z);
+
+  const baseY = box.min.y - 0.06;
+  const platformScale = Math.max(0.95, Math.max(size.x, size.z) * 0.42);
+
+  viewer.platform.scale.set(platformScale, 1, platformScale);
+  viewer.platform.position.y = baseY;
+  viewer.halo.scale.set(platformScale, platformScale, 1);
+  viewer.halo.position.y = baseY + 0.07;
+  viewer.baseModelY = viewer.model.position.y;
+}
+
 function resizeAll() {
   viewers.forEach((viewer) => {
-    const width = viewer.canvasElement?.clientWidth || viewer.container.clientWidth;
-    const canvas =
-      viewer.renderer.domElement || document.querySelector(viewer.canvas);
-    const height = canvas.clientHeight || Math.max(260, viewer.container.clientHeight);
+    const width = viewer.container.clientWidth;
+    const height = Math.max(260, viewer.canvasElement.clientHeight || viewer.container.clientHeight);
 
     viewer.camera.aspect = width / height;
     viewer.camera.updateProjectionMatrix();
     viewer.renderer.setSize(width, height, false);
+
+    if (viewer.loaded) {
+      frameViewer(viewer);
+    }
   });
 }
 
@@ -261,7 +337,7 @@ function animate() {
     viewer.pivot.rotation.y += (viewer.pointerX * 0.55 - viewer.pivot.rotation.y) * 0.02;
     viewer.pivot.rotation.x += (-viewer.pointerY * 0.22 - viewer.pivot.rotation.x) * 0.04;
     viewer.model.position.y =
-      -1.38 + Math.sin(elapsed * viewer.floatSpeed) * viewer.floatAmount;
+      viewer.baseModelY + Math.sin(elapsed * viewer.floatSpeed) * viewer.floatAmount;
 
     viewer.renderer.render(viewer.scene, viewer.camera);
   });

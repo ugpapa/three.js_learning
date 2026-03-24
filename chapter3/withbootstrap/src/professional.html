@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Three.js Professional Showcase</title>
+    <title>Three.js Product Showcase Studio</title>
   </head>
   <body class="showcase-page">
     <header class="showcase-nav navbar navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand" href="./index.html">Three.js Showcase Lab</a>
+        <a class="navbar-brand" href="./index.html">Showcase Studio</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -22,14 +22,12 @@
         </button>
         <div class="collapse navbar-collapse" id="showcaseNav">
           <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#hero">Hero</a></li>
             <li class="nav-item">
-              <a class="nav-link" href="#hero">Hero</a>
+              <a class="nav-link" href="#gallery">Gallery</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#catalog">Catalog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#workflow">Workflow</a>
+              <a class="nav-link" href="#system">System</a>
             </li>
           </ul>
         </div>
@@ -39,45 +37,47 @@
     <main>
       <section id="hero" class="hero-section">
         <div class="container">
-          <div class="row align-items-center gy-5">
+          <div class="row align-items-center g-5">
             <div class="col-lg-5">
-              <p class="eyebrow">Three.js + Bootstrap + Vite</p>
+              <p class="eyebrow">Bootstrap + Three.js + Vite</p>
               <h1 class="display-title">
-                실제 웹사이트에 가까운
-                <span>제품형 3D 쇼케이스</span>
+                제품 페이지 안에서
+                <span>3D를 브랜드 레이어처럼 다루는 방식</span>
               </h1>
               <p class="hero-copy">
-                단순히 캔버스 하나를 띄우는 수준이 아니라, 브랜드 문구와
-                컴포넌트 레이아웃, 반응형 카드, 3D 모델 프리뷰가 함께 작동하는
-                페이지 구조를 만듭니다.
+                `professional.html`은 단순히 모델 하나를 띄우는 페이지가 아닙니다.
+                상단 내비게이션, 히어로 카피, 하이라이트 카드, 작업 원칙까지 모두
+                한 화면 안에서 묶어 실제 서비스용 랜딩 섹션에 가깝게 구성했습니다.
               </p>
               <div class="hero-actions">
-                <a class="btn btn-accent" href="#catalog">모델 카탈로그 보기</a>
-                <a class="btn btn-outline-light" href="./index.html"
-                  >기존 부트스트랩 예제</a
-                >
+                <a class="btn btn-accent" href="#gallery">모델 갤러리 보기</a>
+                <a class="btn btn-outline-light" href="./index.html">기본 예제 보기</a>
               </div>
-              <ul class="hero-metrics">
-                <li>
-                  <strong>4</strong>
-                  <span>독립 캔버스</span>
-                </li>
-                <li>
-                  <strong>1</strong>
-                  <span>공통 애니메이션 루프</span>
-                </li>
-                <li>
-                  <strong>100%</strong>
-                  <span>반응형 레이아웃</span>
-                </li>
-              </ul>
+              <div class="hero-points">
+                <div class="hero-point">
+                  <strong>Hero</strong>
+                  <span>브랜드 첫 화면용 대형 3D 뷰어</span>
+                </div>
+                <div class="hero-point">
+                  <strong>Gallery</strong>
+                  <span>카드 단위로 분리한 서브 뷰어</span>
+                </div>
+                <div class="hero-point">
+                  <strong>System</strong>
+                  <span>공통 루프와 자동 카메라 피팅</span>
+                </div>
+              </div>
             </div>
             <div class="col-lg-7">
               <div class="hero-stage">
                 <canvas id="hero-canvas"></canvas>
-                <div class="stage-copy">
+                <div class="hero-stage__panel">
                   <span>Hero Viewer</span>
-                  <strong>브랜드 첫 화면에 3D를 배치하는 방식</strong>
+                  <strong>대형 제품 오브젝트를 랜딩 비주얼로 배치</strong>
+                  <p>
+                    모델 크기가 달라도 같은 비율 안에 맞추고, 사용자가 마우스를
+                    올리면 시점이 살짝 반응하도록 구성했습니다.
+                  </p>
                 </div>
               </div>
             </div>
@@ -85,73 +85,71 @@
         </div>
       </section>
 
-      <section id="catalog" class="catalog-section">
+      <section id="gallery" class="gallery-section">
         <div class="container">
           <div class="section-heading">
-            <p class="eyebrow">Catalog</p>
-            <h2>콘텐츠 블록 안에서 3D 모델을 개별적으로 운용하기</h2>
+            <p class="eyebrow">Curated Gallery</p>
+            <h2>같은 페이지 안에서 여러 3D 오브젝트를 다루는 카드 패턴</h2>
             <p>
-              카드마다 서로 다른 모델과 조명값을 사용하되, 전체 페이지는 하나의
-              디자인 시스템 안에서 묶이도록 구성합니다.
+              각 카드는 서로 다른 모델을 사용하지만, 카메라 피팅과 자동 회전 규칙은
+              공통으로 유지합니다. 그래서 화면은 통일되고, 오브젝트만 달라지는
+              구조를 만들 수 있습니다.
             </p>
           </div>
+
           <div class="row g-4">
-            <div class="col-md-6">
+            <div class="col-md-6 col-xl-3">
               <article class="showcase-card" data-card="1">
                 <div class="showcase-card__canvas">
                   <canvas id="card-canvas-1"></canvas>
                 </div>
                 <div class="showcase-card__body">
-                  <p class="label">Motion Asset</p>
-                  <h3>Animated Entrance Model</h3>
+                  <p class="label">Animated Asset</p>
+                  <h3>Motion Hero</h3>
                   <p>
-                    애니메이션이 포함된 GLB를 불러와 제품 인트로 또는 캠페인
-                    컷신용 블록으로 사용할 수 있습니다.
+                    애니메이션이 포함된 모델을 카드 안에서 안정적으로 재생하는 예제입니다.
                   </p>
                 </div>
               </article>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xl-3">
               <article class="showcase-card" data-card="2">
                 <div class="showcase-card__canvas">
                   <canvas id="card-canvas-2"></canvas>
                 </div>
                 <div class="showcase-card__body">
                   <p class="label">Packaging</p>
-                  <h3>Product Box Preview</h3>
+                  <h3>Box Preview</h3>
                   <p>
-                    패키지 시안처럼 단단한 형태는 조명 방향과 배경 대비를
-                    활용하면 전시용 렌더처럼 보이게 만들 수 있습니다.
+                    각진 패키지 모델은 강한 림 라이트보다 차분한 면 조명이 더 읽기 좋습니다.
                   </p>
                 </div>
               </article>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xl-3">
               <article class="showcase-card" data-card="3">
                 <div class="showcase-card__canvas">
                   <canvas id="card-canvas-3"></canvas>
                 </div>
                 <div class="showcase-card__body">
                   <p class="label">Material Study</p>
-                  <h3>Glass Surface Detail</h3>
+                  <h3>Glass Volume</h3>
                   <p>
-                    유리나 반투명 재질은 톤매핑과 라이트 강도를 조금만 다듬어도
-                    결과물이 급격히 좋아집니다.
+                    반투명 재질은 어두운 배경과 차가운 보조광을 함께 써야 실루엣이 살아납니다.
                   </p>
                 </div>
               </article>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xl-3">
               <article class="showcase-card" data-card="4">
                 <div class="showcase-card__canvas">
                   <canvas id="card-canvas-4"></canvas>
                 </div>
                 <div class="showcase-card__body">
-                  <p class="label">Industrial Form</p>
-                  <h3>Metal Surface Lighting</h3>
+                  <p class="label">Industrial</p>
+                  <h3>Metal Surface</h3>
                   <p>
-                    금속 모델은 배경을 어둡게 유지하고 림 라이트를 넣어야 재질
-                    대비가 선명하게 살아납니다.
+                    금속성 모델은 배경 대비와 하단 플랫폼을 함께 설계해야 덩어리감이 또렷해집니다.
                   </p>
                 </div>
               </article>
@@ -160,53 +158,50 @@
         </div>
       </section>
 
-      <section id="workflow" class="workflow-section">
+      <section id="system" class="system-section">
         <div class="container">
-          <div class="row g-4 align-items-stretch">
-            <div class="col-lg-4">
-              <div class="workflow-panel">
-                <p class="eyebrow">Workflow</p>
-                <h2>실무적으로 중요한 포인트</h2>
+          <div class="row g-4">
+            <div class="col-lg-5">
+              <div class="system-panel">
+                <p class="eyebrow">System Notes</p>
+                <h2>이 페이지를 실제 서비스 구조처럼 보이게 만드는 핵심 포인트</h2>
                 <p>
-                  웹사이트형 3D 페이지는 모델 자체보다도, 레이아웃과 성능을 함께
-                  설계하는 능력이 중요합니다.
+                  좋은 결과는 모델 하나가 아니라 구조에서 나옵니다. `professional.js`는
+                  여러 캔버스를 하나의 루프로 관리하고, 모델마다 크기가 달라도 같은
+                  카드 규칙 안으로 자동 정렬되게 만듭니다.
                 </p>
               </div>
             </div>
-            <div class="col-lg-8">
-              <div class="workflow-grid">
-                <div class="workflow-item">
+            <div class="col-lg-7">
+              <div class="system-grid">
+                <article class="system-item">
                   <span>01</span>
-                  <h3>Canvas 분리</h3>
+                  <h3>공통 렌더 루프</h3>
                   <p>
-                    페이지 전체를 하나의 씬으로만 보지 말고, 카드 단위로 3D를
-                    나누면 구성과 유지보수가 쉬워집니다.
+                    캔버스가 여러 개여도 애니메이션 루프는 하나로 유지해야 구조가 단순합니다.
                   </p>
-                </div>
-                <div class="workflow-item">
+                </article>
+                <article class="system-item">
                   <span>02</span>
                   <h3>자동 카메라 피팅</h3>
                   <p>
-                    모델 크기가 제각각이어도 Box3로 크기를 계산하면 같은 레이아웃
-                    안에 안정적으로 배치할 수 있습니다.
+                    모델마다 크기와 중심이 달라도 `Box3`로 카메라 거리와 시선을 다시 맞춥니다.
                   </p>
-                </div>
-                <div class="workflow-item">
+                </article>
+                <article class="system-item">
                   <span>03</span>
-                  <h3>브랜드 레이어 결합</h3>
+                  <h3>장면보다 페이지 우선</h3>
                   <p>
-                    문구, 버튼, 통계, 배경 패턴까지 함께 설계해야 실제 서비스용
-                    페이지 품질에 가까워집니다.
+                    3D가 페이지를 삼키지 않도록, 문구와 카드 여백을 먼저 설계한 뒤 캔버스를 넣습니다.
                   </p>
-                </div>
-                <div class="workflow-item">
+                </article>
+                <article class="system-item">
                   <span>04</span>
-                  <h3>공통 루프 관리</h3>
+                  <h3>마우스 반응 최소화</h3>
                   <p>
-                    캔버스가 여러 개여도 애니메이션 루프는 하나로 두는 편이
-                    성능과 구조 양쪽에서 유리합니다.
+                    포인터 반응은 크게 흔들지 않고 살짝만 주어야 제품 페이지처럼 차분하게 보입니다.
                   </p>
-                </div>
+                </article>
               </div>
             </div>
           </div>

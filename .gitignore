@@ -7,6 +7,8 @@ node_modules/
 .qodo/
 **/.qodo/
 
+.pages-site/
+
 *.zip
 firebase-debug.log
 

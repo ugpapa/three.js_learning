@@ -1,0 +1,10 @@
+{
+  "name": "threejs-book-examples-hub",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-showcases.mjs",
+    "build:pages": "node scripts/build-pages-site.mjs",
+    "dev": "node scripts/dev-server.mjs",
+    "serve": "node scripts/dev-server.mjs --skip-build"
+  }
+}
