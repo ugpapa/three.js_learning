@@ -160,7 +160,7 @@ body.showcase-page::before {
 .hero-stage {
   position: relative;
   overflow: hidden;
-  height: 660px;
+  height: 760px;
   border-radius: 34px;
   background:
     radial-gradient(circle at top, rgba(141, 196, 255, 0.12), transparent 28%),
@@ -243,7 +243,7 @@ body.showcase-page::before {
 .showcase-card__canvas {
   position: relative;
   overflow: hidden;
-  height: 220px;
+  height: 300px;
   border-bottom: 1px solid var(--showcase-line);
   background:
     radial-gradient(circle at 50% 12%, rgba(141, 196, 255, 0.2), transparent 42%),
@@ -304,7 +304,7 @@ body.showcase-page::before {
 
 @media (max-width: 991.98px) {
   .hero-stage {
-    height: 520px;
+    height: 620px;
   }
 
   .hero-points {
@@ -324,7 +324,11 @@ body.showcase-page::before {
   }
 
   .hero-stage {
-    height: 420px;
+    height: 500px;
+  }
+
+  .showcase-card__canvas {
+    height: 260px;
   }
 
   .hero-stage__panel {
