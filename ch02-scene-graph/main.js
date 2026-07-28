@@ -16,7 +16,7 @@ const { scene, camera } = app;
 scene.background = new THREE.Color(0x0b0d12);
 scene.fog = new THREE.Fog(0x0b0d12, 8, 30);
 
-// ── 카메라 리그: parallaxRig ▶ dolly ▶ camera ──────────────
+// ── 카메라 리그: parallaxRig → dolly → camera ──────────────
 const parallaxRig = new THREE.Group(); // 마우스 패럴랙스 담당
 const dolly = new THREE.Group();       // 스크롤 이동 담당
 dolly.add(camera);
