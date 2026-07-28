@@ -36,6 +36,13 @@
     details { font-size: 12.5px; color: #8b96ad; }
     #apikey { width: 100%; box-sizing: border-box; margin-top: 6px; background: #101522;
       color: #e8ecf4; border: 1px solid #35405a; border-radius: 6px; padding: 8px; }
+    #back-to-list {
+      position: fixed; top: 14px; left: 50%; translate: -50% 0; z-index: 20;
+      background: rgba(13, 16, 24, 0.78); color: #cfd6e4;
+      border: 1px solid #35405a; border-radius: 999px;
+      padding: 7px 16px; font-size: 13px; text-decoration: none;
+    }
+    #back-to-list:hover { background: #273042; color: #fff; }
   </style>
   <script type="module" crossorigin src="/three.js_learning/v2/assets/ch09-lljBISbm.js"></script>
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/three.module-Bsus6s3a.js">
@@ -44,6 +51,7 @@
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/RoomEnvironment-Dz4eBtr4.js">
 </head>
 <body>
+  <a id="back-to-list" href="../index.html">← 목록으로</a>
   <canvas id="app"></canvas>
   <div id="panel">
     <div id="examples">
