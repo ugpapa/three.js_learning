@@ -12,6 +12,13 @@
       background: rgba(10, 12, 18, 0.7); padding: 10px 14px; border-radius: 8px;
       font-size: 13px; pointer-events: none; line-height: 1.6;
     }
+    #back-to-list {
+      position: fixed; top: 14px; left: 50%; translate: -50% 0; z-index: 20;
+      background: rgba(13, 16, 24, 0.78); color: #cfd6e4;
+      border: 1px solid #35405a; border-radius: 999px;
+      padding: 7px 16px; font-size: 13px; text-decoration: none;
+    }
+    #back-to-list:hover { background: #273042; color: #fff; }
   </style>
   <script type="module" crossorigin src="/three.js_learning/v2/assets/ch03-BT69WiyC.js"></script>
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/three.module-Bsus6s3a.js">
@@ -19,6 +26,7 @@
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/OrbitControls-C1b856-C.js">
 </head>
 <body>
+  <a id="back-to-list" href="../index.html">← 목록으로</a>
   <canvas id="app"></canvas>
   <div id="stats">인스턴스 <b id="count"></b>개 · 드로우콜 <b>1</b>회<br />마우스를 움직여 보십시오.</div>
 </body>
