@@ -20,11 +20,27 @@
       transition: opacity 0.6s; z-index: 10;
     }
     #loading.done { opacity: 0; pointer-events: none; }
+    #home {
+      position: fixed; right: 16px; bottom: 16px;
+      background: #1d2330; color: #dfe6f3; border: 1px solid #35405a;
+      padding: 10px 18px; border-radius: 8px; font-size: 14px; cursor: pointer;
+    }
+    #home:hover { background: #273042; }
+    #tooltip {
+      position: fixed; z-index: 5; pointer-events: none;
+      background: rgba(13, 16, 24, 0.92); color: #e8ecf4;
+      border: 1px solid #35405a; border-radius: 8px;
+      padding: 8px 12px; font-size: 12.5px; line-height: 1.55; max-width: 240px;
+      opacity: 0; transition: opacity 0.15s;
+    }
+    #tooltip.show { opacity: 1; }
+    #tooltip b { color: #9cc4ff; }
   </style>
-  <script type="module" crossorigin src="/three.js_learning/v2/assets/ch10-Prp1t__B.js"></script>
+  <script type="module" crossorigin src="/three.js_learning/v2/assets/ch10-klMhdOKY.js"></script>
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/three.module-GUSlMdfp.js">
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/app-x1TvkXJx.js">
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/OrbitControls-SSRS6O9F.js">
+  <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/lil-gui.esm-BsdZdNnU.js">
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/RoomEnvironment-CP2GfIbe.js">
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/GLTFLoader-B7BVE7mN.js">
 </head>
@@ -35,7 +51,12 @@
     <b>Blender × Claude 룸 뷰어</b><br />
     이 방은 Claude가 blender-mcp로 Blender를 조종해 모델링하고
     glTF로 내보낸 결과물입니다. 10장의 안내대로 여러분의 방을 만들어
-    <b>public/models/room.glb</b> 파일을 교체하면 그 방이 이 자리에 나타납니다.
+    <b>public/models/room.glb</b> 파일을 교체하면 그 방이 이 자리에 나타납니다.<br /><br />
+    책상·책장·침대 탁자·의자·PC·창문에 마우스를 올리면 설명이 뜨고,
+    클릭하면 카메라가 다가갑니다. ‘원래 위치로’ 버튼으로 복귀하십시오.
+    우측 상단 슬라이더로 조명도 직접 조절해 보십시오.
   </div>
+  <button id="home">⌂ 원래 위치로</button>
+  <div id="tooltip"></div>
 </body>
 </html>
