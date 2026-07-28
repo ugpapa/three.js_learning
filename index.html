@@ -1,85 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Three.js Learning Example Hub</title>
-    <link rel="stylesheet" href="/three.js_learning/example-browser.css" />
-  </head>
-  <body class="example-browser">
-    <main class="hub-shell">
-      <header class="hub-hero">
-        <p class="hub-eyebrow">Three.js Learning</p>
-        <h1>전체 예제 허브</h1>
-        <p>
-          이제 `threejs-book-examples` 루트에서 한 번만 실행하면 1장부터 4장까지
-          예제를 한곳에서 열 수 있습니다. 각 챕터 페이지에서 예제 목록을 고르고,
-          예제 화면 안에서는 우측 상단의 `뒤로 / 챕터 목록 / 전체 홈`으로 즉시
-          이동할 수 있습니다.
-        </p>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Three.js 실전 입문 — 예제 허브</title>
+  <style>
+    :root {
+      --bg: #0a0f1c;
+      --card: rgba(15, 22, 38, 0.75);
+      --line: rgba(120, 150, 210, 0.14);
+      --text: #e9eef8;
+      --muted: #9daac2;
+      --accent: #f08c2e;
+      --accent-hi: #ff9f45;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(115deg, rgba(240, 140, 46, 0.10), transparent 42%),
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        var(--bg);
+      background-size: auto, 44px 44px, 44px 44px, auto;
+      min-height: 100vh; padding: 56px 5vw 72px;
+    }
+    .eyebrow {
+      letter-spacing: 0.35em; font-weight: 800; font-size: 0.85rem;
+      color: var(--muted); text-transform: uppercase; margin: 0 0 10px;
+    }
+    h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); margin: 0 0 14px; font-weight: 900; }
+    .lede { color: var(--muted); max-width: 760px; line-height: 1.75; margin: 0 0 40px; }
+    .lede code { color: #c9d6ee; }
 
-      <section class="hub-grid" aria-label="개정판 예제">
-        <article class="hub-card hub-card--chapter">
-          <span class="hub-card__badge">2판 (개정판)</span>
-          <h2>Three.js 실전 입문 — 새 예제 9장</h2>
-          <p>three.js r185 · Vite 기준 전면 개정 예제. 스크롤 히어로, InstancedMesh,
-            Rapier 도미노 런, AI 자연어 장면 생성기까지.</p>
-          <div class="hub-card__actions">
-            <a class="hub-link hub-link--primary" href="/three.js_learning/v2/index.html">열기</a>
-          </div>
-        </article>
-      </section>
+    .grid {
+      display: grid; gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    .card {
+      background: var(--card); border: 1px solid rgba(120, 150, 210, 0.18);
+      border-radius: 18px; padding: 24px 24px 20px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: rgba(240, 140, 46, 0.5); }
+    .badge {
+      align-self: flex-start; font-size: 0.72rem; font-weight: 800;
+      letter-spacing: 0.12em; color: #ffd9ae;
+      background: rgba(240, 140, 46, 0.16); border: 1px solid rgba(240, 140, 46, 0.35);
+      padding: 5px 12px; border-radius: 999px;
+    }
+    .card h2 { font-size: 1.22rem; margin: 2px 0 0; line-height: 1.4; }
+    .card p { color: var(--muted); font-size: 0.92rem; line-height: 1.65; margin: 0; flex: 1; }
+    .open {
+      align-self: flex-start; margin-top: 6px;
+      background: linear-gradient(180deg, var(--accent-hi), var(--accent));
+      color: #fff; font-weight: 700; font-size: 0.95rem;
+      padding: 10px 26px; border-radius: 999px; text-decoration: none;
+      box-shadow: 0 4px 14px rgba(240, 140, 46, 0.35);
+    }
+    .open:hover { filter: brightness(1.08); }
+    .bonus { border-style: dashed; }
+    .bonus .badge { color: #bcd0f2; background: rgba(120, 160, 230, 0.14); border-color: rgba(120, 160, 230, 0.35); }
+  </style>
+</head>
+<body>
+  <p class="eyebrow">Three.js Learning</p>
+  <h1>실전 입문 예제 허브</h1>
+  <p class="lede">
+    three.js r185 · Vite 기준 예제입니다. 1장의 첫 장면에서 시작해
+    물리 엔진, AI 장면 생성, Blender × Claude(MCP) 파이프라인까지 —
+    각 장의 예제는 책의 해당 장과 1:1로 대응합니다.
+  </p>
 
-      <section class="hub-grid" aria-label="챕터 목록">
-        <article class="hub-card hub-card--chapter">
-          <span class="hub-card__badge">Chapter 1</span>
-          <h2>첫 장면, 그림자, 지구와 달</h2>
-          <p>
-            CDN 방식과 모듈 방식의 기초 예제, 그림자, 점프 애니메이션, 지구와 달,
-            다중 오브젝트와 GSAP 예제를 모아 둔 페이지입니다.
-          </p>
-          <div class="hub-card__actions">
-            <a class="hub-link hub-link--primary" href="/three.js_learning/chapter1/index.html">열기</a>
-          </div>
-        </article>
+  <div class="grid">
+    <article class="card">
+      <span class="badge">1장 · 기초</span>
+      <h2>첫 장면 만들기</h2>
+      <p>렌더러·장면·카메라·메쉬·조명·렌더 루프 — three.js 애플리케이션의 골격 전체를 담은 첫 예제입니다.</p>
+      <a class="open" href="./ch01-first-scene/index.html">열기</a>
+    </article>
 
-        <article class="hub-card hub-card--chapter">
-          <span class="hub-card__badge">Chapter 2</span>
-          <h2>파티클, GUI, 환경맵, 로더</h2>
-          <p>
-            파티클 실험, BufferGeometry, GUI 제어, HDRI 환경맵, glTF 로더 예제를
-            단계별로 비교할 수 있습니다.
-          </p>
-          <div class="hub-card__actions">
-            <a class="hub-link hub-link--primary" href="/three.js_learning/chapter2/index.html">열기</a>
-          </div>
-        </article>
+    <article class="card">
+      <span class="badge">2장 · 장면 그래프</span>
+      <h2>스크롤 연동 히어로 섹션</h2>
+      <p>스크롤이 카메라 리그를 움직이고 마우스가 패럴랙스를 더하는, 요즘 제품 사이트의 표준 패턴입니다.</p>
+      <a class="open" href="./ch02-scene-graph/index.html">열기</a>
+    </article>
 
-        <article class="hub-card hub-card--chapter">
-          <span class="hub-card__badge">Chapter 3</span>
-          <h2>Vite, 물리, 볼링 프로젝트</h2>
-          <p>
-            Vite 기반 샘플, 외부 모델 로딩, `cannon-es`, 단계별 볼링 프로젝트,
-            Bootstrap 통합 예제를 한 페이지에서 탐색합니다.
-          </p>
-          <div class="hub-card__actions">
-            <a class="hub-link hub-link--primary" href="/three.js_learning/chapter3/index.html">열기</a>
-          </div>
-        </article>
+    <article class="card">
+      <span class="badge">3장 · 지오메트리</span>
+      <h2>InstancedMesh 그리드 웨이브</h2>
+      <p>큐브 1만 개를 드로우콜 1회로 — 마우스를 따라 지면이 융기하는 대량 인스턴싱 비주얼입니다.</p>
+      <a class="open" href="./ch03-geometry/index.html">열기</a>
+    </article>
 
-        <article class="hub-card hub-card--chapter">
-          <span class="hub-card__badge">Chapter 4</span>
-          <h2>게임용 드래곤 애니메이션 쇼케이스</h2>
-          <p>
-            외부 FBX 자산, AnimationMixer, 카메라와 조명 제어를 하나의 쇼케이스로
-            묶은 최종 예제를 바로 실행할 수 있습니다.
-          </p>
-          <div class="hub-card__actions">
-            <a class="hub-link hub-link--primary" href="/three.js_learning/chapter4/index.html">열기</a>
-          </div>
-        </article>
-      </section>
-    </main>
-  </body>
+    <article class="card">
+      <span class="badge">4장 · 재질과 조명</span>
+      <h2>머티리얼 쇼룸</h2>
+      <p>Basic부터 PBR까지 재질 4종을 나란히 비교하고, lil-gui로 조명·그림자를 실시간 조정합니다.</p>
+      <a class="open" href="./ch04-materials-lights/index.html">열기</a>
+    </article>
+
+    <article class="card">
+      <span class="badge">5장 · 텍스처·환경맵</span>
+      <h2>프로덕트 스튜디오</h2>
+      <p>파일 없이 만드는 절차적 텍스처와 환경맵 — 금속·유리·도자기 재질이 무엇을 반사하는지 배웁니다.</p>
+      <a class="open" href="./ch05-textures-env/index.html">열기</a>
+    </article>
+
+    <article class="card">
+      <span class="badge">6장 · 인터랙션</span>
+      <h2>픽킹과 카메라 연출</h2>
+      <p>외부 라이브러리 없이 직접 구현한 트윈 엔진과 Raycaster 픽킹 — 클릭하면 카메라가 다가갑니다.</p>
+      <a class="open" href="./ch06-animation-interaction/index.html">열기</a>
+    </article>
+
+    <article class="card">
+      <span class="badge">7장 · 모델·파티클</span>
+      <h2>헬멧과 은하</h2>
+      <p>glTF 모델을 진행률 UI와 함께 로딩하고, 파티클 1만 2천 개로 나선 은하를 그립니다.</p>
+      <a class="open" href="./ch07-models-particles/index.html">열기</a>
+    </article>
+
+    <article class="card">
+      <span class="badge">8장 · 물리 엔진</span>
+      <h2>도미노 런</h2>
+      <p>Rapier 물리 엔진으로 S자 곡선을 따라 도미노 40개를 세우고, 공을 발사해 무너뜨립니다.</p>
+      <a class="open" href="./ch08-physics-project/index.html">열기</a>
+    </article>
+
+    <article class="card">
+      <span class="badge">9장 · AI</span>
+      <h2>자연어 장면 생성기</h2>
+      <p>"빨간 금속 구를 왼쪽에" — 한국어 문장이 3D 장면이 됩니다. LLM은 코드가 아니라 JSON을 만듭니다.</p>
+      <a class="open" href="./ch09-ai-scene/index.html">열기</a>
+    </article>
+
+    <article class="card">
+      <span class="badge">10장 · Blender × Claude</span>
+      <h2>내 방을 웹에 올리기</h2>
+      <p>Claude가 MCP로 Blender를 조종해 만든 방 — 가구 픽킹 투어와 조명 슬라이더까지 담긴 최종 예제입니다.</p>
+      <a class="open" href="./ch10-blender-room/index.html">열기</a>
+    </article>
+
+    <article class="card bonus">
+      <span class="badge">부록 A</span>
+      <h2>드래곤 애니메이션 쇼케이스</h2>
+      <p>FBX 모델, AnimationMixer 상태 전환, 블룸 후처리 — 본문이 다루지 않는 캐릭터 애니메이션 실전입니다.</p>
+      <a class="open" href="./appendix-a-dragon/index.html">열기</a>
+    </article>
+  </div>
+
+</body>
 </html>

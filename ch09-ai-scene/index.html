@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>9장 · AI 장면 생성기 — 자연어로 3D 만들기</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; overflow: hidden; font-family: system-ui, sans-serif; }
+    #app { display: block; }
+    #panel {
+      position: fixed; left: 50%; bottom: 24px; translate: -50% 0;
+      width: min(680px, calc(100vw - 32px));
+      background: rgba(13, 16, 24, 0.85); backdrop-filter: blur(12px);
+      border: 1px solid #2a3348; border-radius: 14px; padding: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    #prompt-row { display: flex; gap: 8px; }
+    #prompt {
+      flex: 1; background: #101522; color: #e8ecf4; border: 1px solid #35405a;
+      border-radius: 8px; padding: 12px 14px; font-size: 15px; outline: none;
+    }
+    #prompt:focus { border-color: #5fa8ff; }
+    button {
+      background: #2456c9; color: #fff; border: 0; border-radius: 8px;
+      padding: 0 18px; font-size: 15px; cursor: pointer;
+    }
+    button:hover { background: #2f66e0; }
+    #status { font-size: 12.5px; color: #8b96ad; min-height: 1em; }
+    #examples { display: flex; gap: 6px; flex-wrap: wrap; }
+    #examples span {
+      font-size: 12px; color: #aab6cf; background: #1a2130; border-radius: 999px;
+      padding: 4px 10px; cursor: pointer; border: 1px solid #2a3348;
+    }
+    #examples span:hover { background: #222b3f; }
+    details { font-size: 12.5px; color: #8b96ad; }
+    #apikey { width: 100%; box-sizing: border-box; margin-top: 6px; background: #101522;
+      color: #e8ecf4; border: 1px solid #35405a; border-radius: 6px; padding: 8px; }
+    #back-to-list {
+      position: fixed; top: 14px; left: 50%; translate: -50% 0; z-index: 20;
+      background: rgba(13, 16, 24, 0.78); color: #cfd6e4;
+      border: 1px solid #35405a; border-radius: 999px;
+      padding: 7px 16px; font-size: 13px; text-decoration: none;
+    }
+    #back-to-list:hover { background: #273042; color: #fff; }
+  </style>
+  <script type="module" crossorigin src="/three.js_learning/assets/ch09-lljBISbm.js"></script>
+  <link rel="modulepreload" crossorigin href="/three.js_learning/assets/three.module-Bsus6s3a.js">
+  <link rel="modulepreload" crossorigin href="/three.js_learning/assets/app-B7wsygpM.js">
+  <link rel="modulepreload" crossorigin href="/three.js_learning/assets/OrbitControls-C1b856-C.js">
+  <link rel="modulepreload" crossorigin href="/three.js_learning/assets/RoomEnvironment-Dz4eBtr4.js">
+</head>
+<body>
+  <a id="back-to-list" href="../index.html">← 목록으로</a>
+  <canvas id="app"></canvas>
+  <div id="panel">
+    <div id="examples">
+      <span>빨간 금속 구를 왼쪽에, 파란 유리 큐브를 오른쪽에 놓아줘</span>
+      <span>노란 도넛 다섯 개를 한 줄로 세워줘</span>
+      <span>보라색 원뿔을 가운데 크게, 주위에 초록 구 세 개</span>
+    </div>
+    <div id="prompt-row">
+      <input id="prompt" type="text" placeholder="만들고 싶은 장면을 한국어로 설명하세요…" />
+      <button id="generate">생성</button>
+    </div>
+    <div id="status"></div>
+    <details>
+      <summary>Claude API 키 사용 (선택)</summary>
+      키가 없으면 내장 로컬 파서로 동작합니다. 키를 입력하면 실제 LLM이 장면 JSON을 생성합니다. 키는 브라우저 메모리에만 유지됩니다.
+      <input id="apikey" type="password" placeholder="sk-ant-..." />
+    </details>
+  </div>
+</body>
+</html>
