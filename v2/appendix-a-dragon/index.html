@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>부록 A · 드래곤 애니메이션 쇼케이스</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: system-ui, sans-serif; }
+    #app { display: block; }
+    #actions {
+      position: fixed; left: 50%; bottom: 24px; translate: -50% 0;
+      display: flex; gap: 8px;
+    }
+    #actions button {
+      background: rgba(19, 24, 36, 0.85); color: #dfe6f3;
+      border: 1px solid #35405a; border-radius: 999px;
+      padding: 10px 22px; font-size: 14.5px; cursor: pointer;
+    }
+    #actions button:hover { background: #273042; }
+    #actions button.active {
+      background: linear-gradient(180deg, #ff9f45, #f08c2e);
+      border-color: transparent; color: #fff; font-weight: 700;
+    }
+    #hint {
+      position: fixed; left: 16px; bottom: 16px; color: #cfd6e4;
+      background: rgba(10, 12, 18, 0.7); padding: 10px 14px; border-radius: 8px;
+      font-size: 13px; pointer-events: none; line-height: 1.6;
+    }
+    #loading {
+      position: fixed; inset: 0; display: grid; place-items: center;
+      background: #070a10; color: #cfd6e4; font-size: 15px;
+      transition: opacity 0.6s; z-index: 10;
+    }
+    #loading.done { opacity: 0; pointer-events: none; }
+  </style>
+  <script type="module" crossorigin src="/three.js_learning/v2/assets/appendixA-Bod9F87A.js"></script>
+  <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/three.module-Bsus6s3a.js">
+  <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/app-B7wsygpM.js">
+  <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/OrbitControls-C1b856-C.js">
+  <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/RoomEnvironment-Dz4eBtr4.js">
+</head>
+<body>
+  <canvas id="app"></canvas>
+  <div id="loading">드래곤 로딩 중… <span id="percent">0%</span></div>
+  <div id="actions">
+    <button data-action="idle">멈춤</button>
+    <button data-action="walk">걷기</button>
+    <button data-action="run">달리기</button>
+    <button data-action="fly">비행</button>
+  </div>
+  <div id="hint">숫자 키 1~4로도 동작을 바꿀 수 있습니다. 드래그로 시점 회전.</div>
+</body>
+</html>
