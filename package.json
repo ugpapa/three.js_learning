@@ -1,0 +1,17 @@
+{
+  "name": "threejs-book-examples",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "^0.19.3",
+    "lil-gui": "^0.21.0",
+    "three": "^0.185.1",
+    "vite": "^8.1.5"
+  },
+  "type": "module",
+  "private": true
+}
