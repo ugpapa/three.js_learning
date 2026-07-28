@@ -3,18 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>7장 · 모델 로딩과 파티클</title>
+  <title>10장 · Blender × Claude — 내 방을 웹에 올리기</title>
   <style>
     body { margin: 0; overflow: hidden; font-family: system-ui, sans-serif; }
     #app { display: block; }
+    #panel {
+      position: fixed; left: 16px; top: 16px; max-width: 340px;
+      background: rgba(13, 16, 24, 0.8); backdrop-filter: blur(10px);
+      border: 1px solid #2a3348; border-radius: 12px; padding: 14px 16px;
+      color: #cfd6e4; font-size: 13.5px; line-height: 1.65;
+    }
+    #panel b { color: #fff; }
     #loading {
       position: fixed; inset: 0; display: grid; place-items: center;
-      background: #0a0c11; color: #cfd6e4; font-size: 15px;
+      background: #0d1017; color: #cfd6e4; font-size: 15px;
       transition: opacity 0.6s; z-index: 10;
     }
     #loading.done { opacity: 0; pointer-events: none; }
   </style>
-  <script type="module" crossorigin src="/three.js_learning/v2/assets/ch07-777mTXql.js"></script>
+  <script type="module" crossorigin src="/three.js_learning/v2/assets/ch10-Prp1t__B.js"></script>
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/three.module-GUSlMdfp.js">
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/app-x1TvkXJx.js">
   <link rel="modulepreload" crossorigin href="/three.js_learning/v2/assets/OrbitControls-SSRS6O9F.js">
@@ -23,6 +30,12 @@
 </head>
 <body>
   <canvas id="app"></canvas>
-  <div id="loading">모델 로딩 중… <span id="percent">0%</span></div>
+  <div id="loading">모델 로딩 중…</div>
+  <div id="panel">
+    <b>Blender × Claude 룸 뷰어</b><br />
+    이 방은 Claude가 blender-mcp로 Blender를 조종해 모델링하고
+    glTF로 내보낸 결과물입니다. 10장의 안내대로 여러분의 방을 만들어
+    <b>public/models/room.glb</b> 파일을 교체하면 그 방이 이 자리에 나타납니다.
+  </div>
 </body>
 </html>
